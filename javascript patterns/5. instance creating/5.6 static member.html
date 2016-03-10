@@ -1,0 +1,95 @@
+<script>
+    /* 스태틱 멤버
+        스태틱 프로퍼티와 메서드란 인스턴스에 따라 달라지지 않는 프로퍼티와 메서드를 말한다.
+        클래스 기반의 언어에서는 별도의 문법을 통해 스태틱 멤버를 생성하여 클래스 자체의 멤버인 것처럼 사용한다.
+        예를들어 MathUtils 클래스에 max()라는 스태틱 메서드가 있다면, MathUtils.max(3,5)와 같은 식으로 호출할 수 있다.
+        이것은 공개 스태틱 멤버의 예로, 클래스의 인스턴스를 생성하지 않고도 사용할 수 있다/.
+        비공개 스태틱 멤버는 클래스 사용자에게는 보이지 않지만 클래스의 인스턴스들은 모두 함께 사용할 수 있다.
+        그럼 자바스크립트에서 공개와 비공개 스태틱 멤버를 구현하는 방법을 살펴보자.
+     */
+
+    /* 공개 스태틱 멤버
+        자바스크립트에는 스태틱 멤버를 표기하는 별도의 문법이 존재하지 않는다.
+        그러나 생성자에 프로퍼티를 추가함으로써 클래스 기반 언어와 동일한 문법을 사용할 수 있다.
+        생성자도 다른 함수와 마찬가지로 객체이고 그 자신의 프로퍼티를 가질 수 있기 때문에 이러한 구현이 가능하다.
+        앞장에서 다룬 메모이제이션 패턴도 이처럼 함수에 프로퍼티를 추가하는 개념에 착안한 것이다.
+        다음 예제는 Gadget이라는 생성자에 스태틱 메서드인 isShiny()와 일반적인 인스턴스 메서드인 setPrice()를 정의한 것이다.
+        isShiny()는 특정 Gadget 객체를 필요로 하지 않기 때문에 스태틱 메서드라 할 수 있다.
+        모든 Gadget이 빛나는지 알아내는 데는 특정한 하나의 Gadget이 필요하지 않은 것과 같다.
+        반면 개별 Gadget들의 가격은 다를 수 있기 때문에 setPrice()메서드를 쓰려면 객체가 필요하다.
+     */
+
+    // 생성자
+    var Gadget = function () {};
+
+    /// 스태틱 메서드
+    Gadget.isShiny = function () {
+        return "you bet";
+    };
+
+    // 프로토타입에 일반적인 함수를 추가했다.
+    Gadget.prototype.setPrice = function (price) {
+        this.price = price;
+    }
+
+    // 스태틱 메서드를 호출하는 방법
+    Gadget.isShiny();  // you bet
+
+    // 인스턴스를 생성한 후 메서드를 호출한다.
+    var iphone = new Gadget();
+    iphone.setPrice(500);
+
+    /* 인스턴스 메서드를 스태틱 메서드오 ㅏ같은 방법으로 호출하면 동작하지 않는다.
+       스태틱 메서드 역시 인스턴스인 iphone 객체를 사용해 호출하면 동작하지 않는다.
+     */
+    console.log(typeof Gadget.setPrice);
+    console.log(typeof iphone.isShiny);
+
+    /* 스태틱 메서드가 인스턴스를 통해 호출했을 때도 동작한다면 편리한 경우가 있을 수 있다.
+        이때는 간단하게 프로토타입에 새로운 메서드를 추가하는 것만으로 쉽게 구현할 수 있다.
+        이 새로운 메서드는 원래의 스태틱 메서드를 가리키는 일종의 퍼사드 역할을 한다.
+     */
+    Gadget.prototype.isShiny = Gadget.isShiny;
+    iphone.isShiny();   // "you bet"
+
+
+    /* 이런 경우에는 스태틱 메서드 안에서 this를 사용할 때 주의를 기울여야 한다.
+        Gadget.isShiny()를 호출했을 때 isShiny() 내부의 this는 Gadget 생성자를 가리키지만,
+        iphone.isShiny()를 호출했을 때는 this가 iphone을 가리키게 된다,
+
+        마지막으로 스태틱한 방법으로도, 스태틱하지 않은 방법으로도 호출될 수 있는
+        어떤 메서드를 호출방식에 따라 살짝 다르게 동작하게 하는 예제를 살펴보자.
+        메서드가 어떻게 호출되었는지 판별하기 위해서 instanceof 연산자를 활용한다.
+     */
+
+    // 생성자
+    var Gadget = function (price) {
+        this.price = price;
+    };
+
+    // 스태틱 메서드
+    Gadget.isShiny = function () {
+        // 다음은 항상 동작한다.
+        var msg = "you bet";
+
+        if (this instanceof Gadget) {
+            // 다음은 스태틱하지 않은 방식으로, 호출되었을 때만 동작한다,
+            msg += ", it costs $" + this.price + "|";
+        }
+        return msg;
+    };
+
+    // 프로토타입에 일반적인 메서드를 추가한다.
+    Gadget.prototype.isShiny = function () {
+        return Gadget.isShiny.call(this);
+    };
+
+    // 스태틱 메서드 호출을 테스트해보면 다믕과 같은 결과가 나온다.
+    console.log(Gadget.isShiny());   // "you bet"
+
+    // 인스턴스를 통해 스태틱하지 않은 방법으로 호출해보면 다음과 같은 결과가 나온다.
+    var a = new Gadget('499.99');
+    console.log(a.isShiny());
+
+
+</script>

@@ -1,0 +1,29 @@
+<script>
+    /* 원시 데이터 타입 래퍼
+       자바스크립트에는 Number, String, Boolean, null, undefined의 다섯 가지
+       원시 데이터 타입이 있다.
+       null 과 undefined 를 제외한 나머지는 Number(), String(), Boolean() 생성자를 가진
+       원시 데이터 타입 래퍼를 가지고 있다.
+     */
+
+    // 원시 데이터 타입 숫자
+    var n = 100;
+    console.log(typeof n); // "number"
+
+    // 숫자 객체
+    var nobj = new Number(100);
+    console.log(typeof nobj);  // "object"
+
+    /* 원시 데이터 타입 그대로 써도 래퍼 객체의 메서드를 활용할 수 있다.
+       메서드를 호출하는 순간 내부적으로는 원시 데이터 타입 값이 객체로 임시 변환되어
+       객체처럼 동작한다.
+    */
+
+    // 원시 데이터 타입 문자열을 객체로 사용한다.
+    var s = "hello";
+    console.log(s.toUpperCase());   // "HELLO"
+
+    // 값 자체만으로도 객체처럼 동작할 수 있다.
+    "monkey".slice(3,6);   // "key"
+    // 그러나 원시 데이터 타입은 객체가 아니기 때문에 프로퍼티를 추가하여 확장할 수 없다.
+</script>

@@ -1,0 +1,44 @@
+<script>
+    /*//생성자
+    function Waffle() {
+        this.taste = "yummy";
+    }
+
+    // 새로운 객체
+    var good_morning = new Waffle();
+    console.log(typeof good_morning);   // "object"
+    console.log(good_morning.taste);    // "yummy"
+
+    // 안티패턴
+    var bad_morning = Waffle();
+    console.log(typeof bad_morning);    // undefined
+    console.log(window.taste);          // "yummy"*/
+
+    //=============================================//
+    /* 스스로를 호출하는 생성자
+       생성자 내부에서 this가 해당 생성자의 인스턴스인지를 확인하고,
+       그렇지 않은 경우 new와 함께 스스로를 재호출한다.
+     */
+    function Waffle() {
+        /*if (!(this instanceof Waffle)) {
+           return new Waffle();
+        }*/
+        // 생성자 이름을 하드코딩 하는대신, arguments.callee 와 비교한다.
+        if (!(this instanceof arguments.callee)) {
+            return new Waffle();
+        }
+
+        this.taste = "yummy";
+    }
+
+    Waffle.prototype.wantAnother = true;
+
+    var first = new Waffle(),
+        second = Waffle();
+
+    console.log(first.taste);  // 'yummy'
+    console.log(second.taste); // 'undefined'
+
+    console.log(first.wantAnother);  // true
+    console.log(second.wantAnother); // true
+</script>

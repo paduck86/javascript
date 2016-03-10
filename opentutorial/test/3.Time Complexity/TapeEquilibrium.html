@@ -1,0 +1,38 @@
+<script>
+// you can write to stdout for debugging purposes, e.g.
+// console.log('this is a debug message');
+
+    function solution(A) {
+        var N = A.length;
+        var min, difference;
+        var left, right;
+        for(var P = 1; P < N; P++) {
+            left=leftSum(A,P);
+            right=rightSum(A,P,N);
+            difference = Math.abs(left - right);
+            if(typeof min === 'undefined'){
+                min = difference;
+            }else if(difference < min) {
+                min = difference;
+            }
+        }
+        return min;
+    }
+
+    function leftSum(A,P) {
+        var sum = 0;
+        for(var i = 0; i < P; i++) {
+            sum += A[i];
+        }
+        return sum;
+    }
+
+    function rightSum(A,P,N) {
+        var sum = 0;
+        for(var i = P; i < N; i++) {
+            sum += A[i];
+        }
+        return sum;
+    }
+    console.log(solution([3,1,2,4,3]));
+</script>

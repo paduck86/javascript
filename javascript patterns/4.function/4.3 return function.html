@@ -1,0 +1,33 @@
+<script>
+    // 함수는 객체이기 때문에 반환값을 사용할 수 있다.
+    var setup = function () {
+        alert(1);
+
+        return function () {
+            alert(2);
+        };
+    }
+
+    // setup 함수를 사용
+
+    var my = setup(); // 1
+    my(); // 2
+
+    /* setup()은 반환된 함수를 감싸고 있기 때문에 클로져를 생성한다.
+     클로져는 반환되는 함수에서는 접근할 수 있지만, 코드 외부에서는 접근할 수 없기 때문에,
+     비공개 데이터 저장을 위해 사용할 수 있다.
+     매번 호출할 때마다 값을 증가시키는 (counter)를 예제로 들 수 있다.
+     */
+    var setup = function () {
+      var cnt = 0;
+      return function () {
+          return ++cnt;
+      };
+    };
+
+    var next = setup();
+    console.log(next()); // 1
+    console.log(next()); // 2
+    console.log(next()); // 3
+
+</script>

@@ -1,0 +1,41 @@
+<script>
+   /* function Person(name) {
+        this.name = name;
+        this.introduce = function() {
+            return 'My name is ' + this.name;
+        }
+    }
+    
+    var p1 = new Person('egoing');
+    document.write(p1.introduce() + "<br/>");
+   */
+    // 위 코드를 아래와 같이 바꿔보자.
+    
+    function Person(name) {
+        this.name = name;
+//        this.introduce = function() {
+//            return 'My name is ' + this.name;
+//        }
+    }
+    Person.prototype.name = null;
+    Person.prototype.introduce = function() {
+        return 'My name is ' + this.name;
+    }
+    var p1 = new Person('egoing');
+    document.write(p1.introduce() + "<br/>");
+    
+    function Programmer(name) {
+        this.name = name;
+//        this.coding = function() {
+//            return 'hello world!';
+//        }
+    }
+    Programmer.prototype = new Person();
+    Programmer.prototype.coding = function() {
+        return 'hello world!';
+    }
+    var p2 = new Programmer('egoing2');
+    p2.introduce();
+    document.write(p2.introduce() + "<br/>");
+    document.write(p2.coding() + "<br/>");
+</script>

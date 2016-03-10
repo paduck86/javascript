@@ -1,0 +1,15 @@
+<script>
+    /* 콜백 패턴
+       함수는 객체다. 즉, 함수를 다른 함수에 전달할 수 있다.
+     */
+
+    function writeCode(callback) {
+        callback();
+    }
+
+    function introduceBugs() {
+
+    }
+
+    writeCode(introduceBugs);
+</script>

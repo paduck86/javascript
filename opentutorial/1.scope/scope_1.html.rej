@@ -1,0 +1,12 @@
+diff a/1.scope/scope_1.html b/1.scope/scope_1.html	(rejected hunks)
+@@ -1,9 +0,0 @@
+-<html>
+-    <script>
+-        var vscope = 'global';
+-        function fscope(){
+-            alert(vscope);
+-        }
+-        fscope();
+-    </script>
+-</html>
+\ No newline at end of file

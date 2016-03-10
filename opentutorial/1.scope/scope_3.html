@@ -1,0 +1,12 @@
+<html>
+    <script>
+        // var 키워드를 쓰지 않으면 글로벌로 됨.
+        var vscope = 'global';
+        function fscope() {
+           vscope = 'local';
+           alert('함수안'+vscope);
+        } 
+        fscope();
+        alert('함수밖'+vscope);
+    </script>
+</html>

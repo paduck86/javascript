@@ -1,0 +1,14 @@
+diff a/1.scope/scope_2.html b/1.scope/scope_2.html	(rejected hunks)
+@@ -1,11 +0,0 @@
+-<html>
+-    <script>
+-        var vscope = 'global';
+-        function fscope() {
+-            var vscope = 'local';
+-            alert('함수안'+vscope);
+-        }
+-        fscope();
+-        alert('함수밖' + vscope);
+-    </script>
+-</html>
+\ No newline at end of file

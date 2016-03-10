@@ -1,0 +1,41 @@
+<script>
+    /* Function.prototype.bind()
+        ECMAScript5에서는 Function.prototype에 bind()메서드가 추가되어, apply()나 call()과 마찬가지로 쉽게 사용할 수 있다.
+        따라서 다음과 같은 표현식이 가능하다.
+
+        var newFunc = obj.someFunc.bind(myobj, 1, 2, 3);
+
+        이 코드는 myobj와 someFunc()를 바인딩하며, someFunc()에 넘겨줄 세 개의 인자도 먼저 채워놓았다.
+        즉 4장에서 다룬 부분적인 함수 애플리케이션 패턴을 응용한 것이다.
+        ES5가 구현되지 않은 환경에서 프로그램을 실행할 때는 Function.prototype.bind()를 어떻게 구현할 수 있는지 살펴보자.
+     */
+
+    if(typeof Function.prototype.bind === "undefined") {
+        Function.prototype.bind = function (thisArg) {
+            var fn = this,
+                slice = Array.prototype.slice,
+                args = slice.call(arguments, 1);
+
+            return function () {
+                return fn.apply(thisArg, args.concat(slice.call(arguments)));
+            };
+        };
+    }
+
+    var one = {
+        name: "object",
+        say: function (greet) {
+            return greet + ", " + this.name;
+        }
+    };
+
+    var two = {
+        name: "another object"
+    };
+
+    var twosay2 = one.say.bind(two);
+    console.log(twosay2('Bonjour'));    // "Bonjour, another object"
+
+    var twosay3 = one.say.bind(two, 'Enchante', 'zzz');
+    console.log(twosay3()); // "Enchante, another object"
+</script>

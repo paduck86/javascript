@@ -1,0 +1,26 @@
+<script>
+    function solution(N) {
+        var binaryN,cnt,nextChar;
+        var max=0,gap=0;
+
+        if(N >= 1 || N <= 2147483647) {
+            binaryN = N.toString(2);
+            cnt = binaryN.length;
+            for(var i=0; i < cnt; i++) {
+                nextChar = i == (cnt - 1) ? '-1' : binaryN.charAt(i + 1);
+                if(binaryN.charAt(i) == '0') {
+                    gap++;
+                    if(nextChar == '1') {
+                        max = (max < gap) ? gap : max;
+                        gap = 0;
+                    }
+                }
+            }
+            return max;
+        }else{
+            return 0;
+        }
+    }
+
+    console.log(solution(6));
+</script>

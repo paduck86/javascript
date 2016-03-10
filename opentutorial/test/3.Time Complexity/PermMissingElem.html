@@ -1,0 +1,27 @@
+<script>
+    // 50점 
+    // empty_and_single 
+    // missing_first_or_last
+    // single ?
+    // double ?
+    function solution(A) {
+        // number sort function~~~
+        A.sort(function(a,b){return a-b});
+        var cnt = A.length;
+        // empty_and_single
+        if( cnt <= 1 || A[0] != 1) {
+            return 1;
+        }else{
+            // missing_first_or_last
+            for(var i = 0; i < cnt; i++) {
+                if((A[i]+1) != A[i+1]){
+                    return A[i]+1;
+                }
+            }
+        }
+    }
+    
+    var A = [3,1,2,4,7,6,8,9,10];
+    console.log(solution(A));
+    
+</script>

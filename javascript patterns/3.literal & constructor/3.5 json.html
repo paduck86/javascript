@@ -1,0 +1,21 @@
+<script>
+    /* JSON
+       JSON 에서는 프로퍼티명을 따옴표로 감싸야 한다는 점이 객체 리터럴과의
+       유일한 문법적 차이다.
+     */
+
+    // 입력되는 JSON 문자열
+    var jstr = '{"mykey": "my value"}';
+
+    var data = JSON.parse(jstr);
+    console.log(data.mykey);
+
+    var dog = {
+        name: "Fido",
+        dob: new Date(),
+        legs: [1, 2, 3, 4]
+    }
+
+    var jsonstr = JSON.stringify(dog);
+    console.log(jsonstr);
+</script>

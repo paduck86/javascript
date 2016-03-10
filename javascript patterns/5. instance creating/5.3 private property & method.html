@@ -1,0 +1,46 @@
+<script>
+    /* 5.3 비공개 프로퍼티와 메서드
+        자바 등 다른 언어와는 달리 자바스크립트에는 private, protected, public 프로퍼티와
+        메서드를 나타내는 별도의 문법이 없다. 객체의 모든 멤버는 public, 즉 공개되어 있다.
+     */
+
+    var myobj = {
+      myprop: 1,
+      getProp: function () {
+          return this.myprop;
+      }
+    };
+
+    console.log(myobj.myprop);  // 1
+    console.log(myobj.getProp());   // 1
+
+    // 생성자 함수를 사용해 객체를 생성할 때도 마찬가지로 모든 멤버가 공개된다.
+//    function Gadget() {
+//        this.name = 'iPod';
+//        this.stretch = function () {
+//          return 'iPad';
+//        };
+//    }
+//
+//    var toy = new Gadget();
+//    console.log(toy.name);  // iPod
+//    console.log(toy.stretch()); // iPad
+
+    /* 비공개(private) 멤버
+        비공개 멤버에 대한 별도의 문법은 없지만 클로저를 사용해서 구현할 수 있다.
+        생성자 함수 안에서 클로저를 만들면, 클로저 유효범위 안의 변수는 생성자 함수 외부에
+        노출되지 않지만 객체의 공객 메서드 안에서는 쓸 수 있다. 즉, 생성자에서 객체를
+        반환할 때 객체의 메서드를 정의하면, 이 메서드 안에서는 비공개 변수에 접근할 수 있는 것이다.
+     */
+    function Gadget() {
+        // 비공개 멤버
+        var name = 'iPod';
+        // 공개된 함수
+        this.getName = function () {
+            return name;
+        };
+    }
+    var toy = new Gadget();
+    alert(toy.name);
+    alert(toy.getName());
+</script>

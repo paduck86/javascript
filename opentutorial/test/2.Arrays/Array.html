@@ -1,0 +1,29 @@
+<script>
+    // 55점 performance = 20%
+    function solution(A) {
+        var cnt = A.length;
+        var B = A;
+        var isPaired;
+        var unPairedNumber;
+        for(var i=0; i<cnt; i++) {
+            isPaired = false;
+            for(var j=0; j<cnt; j++) {
+                if(i!=j) {
+                    if(A[i] == B[j]) {
+                        isPaired = true;
+                        break;
+                    }
+                }
+            }
+            if(!isPaired) {
+                unPairedNumber = A[i];
+                break;
+            }
+        }
+        return unPairedNumber;
+    }
+    
+    var A = [9,3,9,3,9,7,9];
+    console.log(solution(A));
+    
+</script>

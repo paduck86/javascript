@@ -1,0 +1,32 @@
+<script>
+    /* 내가 만든 예제
+        보통 객체 리터럴을 부모로 두고,
+        Object.create 로 상속을 받게 된다.
+     */
+    var parent = {
+        name: "papa",
+        getName: function () {
+            return this.name;
+        }
+    };
+
+    var child = Object.create(parent, {
+        name: {value: "child"},
+        age: {value: "2"}
+    });
+
+    /* child = {
+          name: "child",
+          age: "2",
+          __proto__: {
+             name: "papa",
+             getName: function () {
+                 return this.name;
+             },
+             __proto__: object
+          }
+       }
+     */
+
+    console.log(child.getName());
+</script>

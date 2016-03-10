@@ -1,0 +1,54 @@
+<script>
+    /* 메서드
+        클래스 관점에서 생각하는데 익숙한 개발자에게 자바스크립트는 좀 혼란스러운 언어일 수 있다.
+        그래서 어떤 개발자들은 자바스크립트를 좀더 클래스 기반의 방식으로 만들려고 애쓴다.
+        더글라스 크록포트가 고안한 method() 메서드라는 개념도 이러한 시도 중 하나다.
+        후에 더글라스 크록포드는 자바스크립트를 클래스 기반의 방식으로 만드는 것이 권할 만한 접근 방법은 아니라고
+        인정한 바 있지만, 그럼에도 불구하고 이 패턴은 매우 흥미로우며, 다른 애플리케이션 코드에서 만나게 될 수도 있다.
+
+        생성자 본문 내에서 인스턴스 프로퍼티를 추가할 수 있다는 점에서,
+        생성자 함수의 사용법은 자바에서 클래스를 사용하는 것과 비슷하다.
+        그러나 this에 인스턴스 메서드를 추가하게 되면 인스턴스마다 메서드가 재생성되어 메모리를 잡아먹기 때문에 비효율적이다.
+        따라서 재사용 가능한 메서드는 생성자의 prototype 프로퍼티에 추가되어야 한다.
+        그런데 prototype이란 것이 다른 개발자들에게는 낯선 개념일 수 있기 때문에, method()라는 메서드 속에 숨겨두는 것이다.
+     */
+
+    // method() 메서드의 구현은 다음과 같다.
+    /* 위의 구현을 보면, 먼저 해당 메서드가 이미 구현되어 있는지 확인하고 있다.
+       구현되어 있지 않다면 진행을 계속해, implementation이라는 인자로 전달된 함수를 생성자의 프로토타입에 추가한다.
+       여기서는 this가 생성자 함수를 가리키기 때문에 생성자 함수의 프로토타입이 확장된다.
+    */
+    if (Function.prototype.method !== "function") {
+        Function.prototype.method = function (name, implementation) {
+            this.prototype[name] = implementation;
+            return this;
+        };
+    }
+
+    // method 를 이용해 '클래스'를 정의하는 방법
+    var Person = function (name) {
+        this.name = name;
+    }.
+        method('getName', function () {
+            return this.name;
+        }).
+        method('setName', function (name) {
+            this.name = name;
+            return this;
+        });
+
+    /* 생성자에 연이어 method()가 호출되고, 계속해서 그 다음 method() 호출이 이어지는 데 유의하라.
+        이 예제는 앞서 설명한 체이닝 패턴을 따르고 있다. 덕분에 '클래스' 전체를 하나의 명령문으로 정의했다.
+
+        methos()는 두개의 매개변수를 받는다
+        - 새로운 메서드의 이름
+        - 메서드의 구현내용
+
+        그런 다음 새로운 메서드가 Person이라는 '클래스'에 추가된다. 구현내용이란 곧 또다른 함수를 말한다.
+        짐작할 수 있다시피 이 함수 안에서 this는 Person 생성자로 생성한 객체를 가리키게 된다.
+
+     */
+    var a = new Person('Adam');
+    a.getName(); // Adam
+    a.setName('Eve').getName(); // Eve
+</script>

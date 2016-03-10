@@ -1,0 +1,19 @@
+<script>
+    var Person = function (name) {
+        this.name = name;
+        // 객체 생성시 각 인스턴스에 들어가게 됨.
+        /*this.say = function () {
+            console.log("I am " + this.name);
+        }*/
+    }
+    // say 라는 메서드는 인스턴스별로 달라지는게 아니므로,
+    // 이 메서드는 Person의 프로토타입에 추가하는 것이 더 낫다.
+    Person.prototype.say = function () {
+        console.log("I am " + this.name);
+    }
+    var adam = new Person("Adam");
+    adam.say(); // "I am Adam"
+
+
+
+</script>

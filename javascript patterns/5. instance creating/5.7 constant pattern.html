@@ -1,0 +1,62 @@
+<script>
+    /* 범용 constant 객체를 구현해보자.
+
+    - set(name, value) : 새로운 상수를 정의한다.
+    - isDefined(name) : 특정 이름의 상수가 있는지 확인한다.
+    - get(name) : 상수의 값을 가져온다.
+
+    이 예제에서는 상수 값으로 원시 데이터 타입만 허용된다.
+    또한 선언하려는 상수의 이름이 toString이나 hasOwnProperty 등 내장 프로퍼티의 이름과 겹치지 않도록
+     보장하기 위해 hasOwnProperty()를 사용한 별도의 확인 작업을 거친다.
+     마지막으로 모든 상수의 이름 앞에 임의로 생성된 접두어를 붙인다.
+     */
+
+    var constant = (function () {
+        var constants = {},
+            ownProp = Object.prototype.hasOwnProperty,
+            allowed = {
+                string: 1,
+                number: 1,
+                boolean: 1
+            },
+            prefix = (Math.random() + "_").slice(2);
+
+        return {
+            set: function (name, value) {
+                if (this.isDefined(name)) {
+                    return false;
+                }
+                // 원시 데이터만 허용
+                if (!ownProp.call(allowed, typeof value)) {
+                    return false;
+                }
+                constants[prefix + name] = value;
+                return true;
+            },
+            isDefined: function (name) {
+                return ownProp.call(constants, prefix + name);
+            },
+            get: function (name) {
+                if (this.isDefined(name)) {
+                    return constants[prefix + name];
+                }
+                return null;
+            }
+        };
+    }());
+
+    // 이미 정의되었는지 확인해본다.
+    constant.isDefined("maxwidth"); // false
+
+    // 정의한다.
+    constant.set("maxwidth", 480);  // true
+
+    // 정의되었는지 다시 확인해본다.
+    constant.isDefined("maxwidth"); // true
+
+    // 다시 정의를 시도해본다.
+    constant.set("maxwidth", 320);  // false
+
+    // 값은 그대로인가?
+    constant.get("maxwidth");   // 480
+</script>

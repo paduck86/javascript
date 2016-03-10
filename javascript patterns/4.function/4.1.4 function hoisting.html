@@ -1,0 +1,36 @@
+<script>
+    // 안티패턴
+    // 설명을 위해 사용하였다
+
+    // 전역 함수
+    function foo() {
+        alert('global foo');
+    }
+
+    function bar() {
+        alert('global bar');
+    }
+
+    function hoistMe() {
+        console.log(typeof foo);
+        console.log(typeof bar);
+
+        foo();
+        bar();
+
+        function foo() {
+            alert('local foo');
+        }
+
+        var bar = function () {
+            alert('local bar');
+        };
+
+    }
+    hoistMe();
+
+    /*
+      1. 함수는 객체다.
+      2. 함수는 지역 유효범위를 제공한다.
+     */
+</script>

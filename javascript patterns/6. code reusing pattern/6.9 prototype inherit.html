@@ -1,0 +1,77 @@
+<script>
+    /* 프로토타입을 활용한 상속
+        이제 클래스를 사용하지 않는 '새로운' 방식의 패턴을 살펴보자.
+        이 패턴에서는 클래스를 찾아볼 수 없다. 객체가 객체를 상속받는다.
+        재사용하려는 객체가 하나 있고, 또다른 객체를 만들어 이 첫번째 객체의 기능을 가져온다고 생각하면 된다.
+
+     */
+
+    // 상속해줄 객체
+    var parent = {
+        name: "Papa"
+    };
+
+    // 새로운 객체
+    var child = object(parent);
+
+    // 테스트해보자
+    alert(child.name); // "Papa"
+
+    function object(o) {
+        function F() {}
+        F.prototype = o;
+        return new F();
+    }
+    /* 여기서 child 객체는 자기 자신의 프로퍼티를 가지지 않는 빈 객체이지만,
+        __proto__ 링크 덕에 parent의 모든 기능을 가지고 있다.
+
+     */
+
+    /* 논의
+        프로토타입을 활용한 상속 패턴에서 부모가 객체 리터럴로 생성되어야만 하는 것은 아니다
+        (흔히 쓰는 방식이긴 하겠지만). 생성자 함수를 통해 부모를 생성할 수도 있다.
+        이 경우 부모 객체 자신의 프로퍼티와 생성자 함수의 프로토타입에 포함된 프로퍼티가 모두 상속된다는 점도 유의해야한다.
+     */
+    // 부모 생성자
+    function Person() {
+        // 부모 생성자 자신의 프로퍼티
+        this.name = "Adam";
+    }
+    // 프로토타입에 추가된 프로퍼티
+    Person.prototype.getName = function () {
+        return this.name;
+    }
+
+    // Person 인스턴스를 생성한다
+    var papa = new Person();
+    /* papa = {
+          name : "Adam",
+          __proto__ = Person.prototype;
+       }
+     */
+
+    // 이 인스턴스를 상속한다.
+    var kid = object(papa);
+    /* kid = {
+         __proto__ : {
+            name : "Adam"
+            __proto__ : Person.prototype(getName())
+         }
+       }
+     */
+
+    /* [[[ECMAScript 5의 추가사항]]]
+        ECMAScript 5에서는 프로토타입을 활용한 상속 패턴이 언어의 공식 요소가 되었다.
+        Object.create()가 이 패턴을 구현하고 있다. 즉 object()와 같은 함수를 따로 만들지 않아도 이 기능이 언어에 내장된다.
+
+        var child = Object.create(parent);
+
+        Object.create()은 두 번째 선택적 매개변수로 객체를 받는다. 전달된 객체의 프로퍼티는,
+        반환되는 child객체 자신의 프로퍼티로 추가된다.
+        한번의 메서드 호출로 child 객체의 상속과 정의가 가능하므로 편리하게 쓸 수 있다.
+        예제를 보자.
+     */
+    var newChild = Object.create(parent, {
+        age: { value : 2 }  // ECMA 5 기술자 (descriptor)
+    });
+</script>

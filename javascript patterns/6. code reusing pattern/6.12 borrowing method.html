@@ -1,0 +1,65 @@
+<script>
+    /* 메서드 빌려쓰기
+        어떤 객체에서 메서드 한두 개만 마음에 드는 경우가 있다.
+        이 메서드들을 재사용하고 싶지만 이 객체와 부모-자식 관계까지 만들고 싶지는 않다.
+        쓸 일이 없는 모든 메서드를 상속받지 않고, 원하는 메서드만 골라서 사용하고 싶다면
+        메서드 빌려쓰기 패턴을 사용하면 된다.
+        이 패턴은 함수의메서드인 call()과 apply()를 활용한다.
+     */
+
+    var one = {
+        name: "object",
+        say: function (greet) {
+            return greet + ", " + this.name;
+        }
+    };
+
+    // 테스트
+    one.say('hi');  // hi, object
+
+    var two = {
+        name: "another object"
+    };
+
+    one.say.call(two,'hello');  // "hello, another object"
+
+    /* 위 예제에서는 say() 내부의 this가 two를 가리키고 있기 대문에 this.name은
+       "another object"가 된다. 그런데 이 함수 포인터가 전역 객체를 가리키게 될 경우에는 어떻게 될까?
+       이 함수를 콜백함수로 전달하는 경우에는?
+       수만은 이벤트와 콜백함수가 존재하는 클라이언트 측 프로그래밍에서는 이런 일이 자주 일어난다.
+     */
+
+    // 함수를 변수에 할당하면 함수 안의 this는 전역 객체를 가리키게 된다.
+    var say = one.say;
+    say('hoho');    // "hoho, undefined"
+
+    // 콜백 함수로 전달한 경우
+    var yetanother = {
+        name: "Yet another object",
+        method: function (callback) {
+            return callback('Hola');
+        }
+    };
+    yetanother.method(one.say); // hola, undefined
+
+    /* 앞의 두 예제 모두, say() 안의 this가 전역 객체를 가리키기 때문에 코드가 제대로 동작하지 않는다.
+    메서드와 객체를 묶어놓기 위해서는 (달리 말해, 바인딩하기 위해서) 다음과 같은 간단한 함수를 사용할 수 있다.
+     */
+    function bind(o, m) {
+        return function () {
+            m.apply(o,Array.prototype.slice.call(arguments));
+        };
+    }
+    /* 이 bind() 함수는 o라는 객체와 m이라는 메서드를 인자로 받은 다음, 이 둘을 바인딩한 새로운 함수를 반환한다.
+    반환되는 새로운 함수는 클로저를 통해 o와 m에 접근할 수 있다.
+    따라서 bind()에서 함수를 반환한 다음에도, 내부 함수는 원본 객체를 가리키는 o와 원본 메서드를 가리키는 m에
+    접근할 수 있다.
+     */
+    var twosay = bind(two, one.say);
+    twosay('yo');
+    /* 보다시피 twosay()는 전역 함수로 생성되었지만, this가 전역객체를 가리키지 않고,
+    bind()에 전달된 two객체를 가리킨다. twosay()함수를 어떻게 호출하든, this는 항상 two에 바인딩되어 있을 것이다.
+    클로저 하나가 추가로 사용된 것이 이 바인딩을 유지하는데 드는 비용이라고 할 수 있다.
+     */
+
+</script>

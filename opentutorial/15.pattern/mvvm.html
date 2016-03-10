@@ -1,0 +1,54 @@
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+
+<div data-value="wow">wow</div>
+<div data-value="wow2">wow2</div>
+
+<script>
+    var Pattern = function() {
+        var self = this;
+        var events = {};
+        var $obj;
+        self.init = function(element) {
+            self.obj = $(element);
+            self.value = self.obj.data('value');
+        };
+        self.on = function(name,func) {
+            if(!events[name]){
+                events[name] = [];
+            }
+            events[name].push(func);
+        };
+        self.trigger = function(name) {
+            if(events[name] && events[name].length > 0) {
+                var l = events[name].length;
+                for(var i = 0; i< l; i++) {
+                    events[name][i].call(this);
+                }
+            }
+        };
+    };
+    
+    var wow = {
+        value : ""
+    };
+    
+    var wow2 = {
+        value : ""
+    };
+    
+    Pattern.apply(wow);
+    Pattern.apply(wow2);
+    
+    wow.on('update', function() {
+        var self = this;
+        $(self.obj).html(self.value);
+    });
+    
+    $(document).ready(function(){
+       $(document.querySelectorAll('[data-value]')).each(function(index, element) {
+           var tempObj = eval(element.dataset.value);
+           tempObj.init(element);
+           tempObj.trigger('update');
+       }); 
+    });
+</script>

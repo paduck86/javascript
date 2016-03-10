@@ -1,0 +1,37 @@
+<script>
+    /* 프로토타입과 비공개 멤버
+        생성자를 사용하여 비공개 멤버를 만들 경우, 생성자를 호출하여 새로운 객체를 만들 때마다
+        비공개 멤버가 매번 재생성된다는 단점이 있다.
+         사실 생성자 내부에서 this에 멤버를 추가하면 항상 이런 문제가 발생한다. 이러한 중복을
+        없애고 메모리를 절약하려면 공통 프로퍼티와 메서드를 생성자의 prototype 프로퍼티에 추가해야 한다.
+        이렇게 하면 동일한 생성자로 생성한 모든 인스턴스가 공통된 부분을 공유하게 된다.
+        감춰진 비공개 멤버들도 모든 인스턴스가 함께 쓸 수 있다. 이를 위해서는 두가지 패턴,
+        즉 생성자 함수 내부에 비공개 멤버를 만드는 패턴과 객체 리터럴로 비공개 멤버를 만드는 패턴을 함께 써야 한다.
+        왜냐하면 prototype 프로퍼티도 결국 객체라서, 객체 리터럴로 생성할 수 있기 때문이다.
+     */
+
+    function Gadget() {
+        // 비공개 멤버
+        var name = "iPod";
+        // 공개 함수
+        this.getName = function () {
+            return name;
+        };
+    }
+
+    Gadget.prototype = (function () {
+        // 비공개 멤버
+        var browser = "Mobile Webkit";
+
+        // 공개된 프로토타입 멤버
+        return {
+          getBrowser: function () {
+              return browser;
+          }
+        };
+    }());
+
+    var toy = new Gadget();
+    alert(toy.getName()); // 객체 인스턴스의 특권 메서드
+    alert(toy.getBrowser()); // 프로토타입의 특권 메서드
+</script>

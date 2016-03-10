@@ -1,0 +1,51 @@
+<script>
+    /* 즉시실행함수
+        즉시실행함수패턴은 함수가 선언되자마자 실행되도록 하는 문법이다.
+     */
+    (function () {
+       alert('watch out!');
+    })();
+
+    /* 이 패턴은 초기화 코드에 유효범위 샌드박스를 제공한다는 점에서 유용하다.
+        페이지 로드 완료 후, 이벤트 핸들러 등록하거나, 객체를 생성하는 등의
+        초기 설정 작업은, 단 한번만 실행되기 때문에 재사용하기위해 이름이 지정된 함수를
+        생성할 필요가 없다.
+
+        즉시 실행함수는 모든 코드를 지역 유효범위로 감싸고
+        어떤 변수도 전역 유효범위로 새어나가지 않게 한다.
+     */
+
+    (function () {
+        var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+            today = new Date(),
+            msg = 'Today is ' + days[today.getDay()] + ',' + today.getDate();
+
+        alert(msg);
+    })();
+
+    /* 즉시실행함수에 인자를 전달할 수도 있다.
+     */
+
+    (function (who, when) {
+        alert("I met " + who + " on " + when);
+    })("Jin Seok", new Date());
+
+    /* 이러한 방버블 통해 브라우저 외의 실행 환경에서도 코드를 공통으로 사용할 수 있다.
+     */
+    (function (global) {
+        // 전역객체를 'global'로 참조
+    })(this);
+
+    /* 즉시 실행 함수는 객체 프로퍼티를 정의할 때에도 사용할 수 있다.
+     */
+    var o = {
+        message: (function () {
+            var who = "me",
+                what = "call";
+            return what + " " + who;
+        }()),
+        getMsg: function () {
+            return this.message;
+        }
+    }
+</script>

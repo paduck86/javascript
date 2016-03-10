@@ -1,0 +1,28 @@
+<script>
+    // 함수외부의 컨텍스트에 접근할 수 있을 것으로 기대하겠지만 결과는 다음과 같다.
+    // 5,5,5,5,5
+    var arr1 = [];
+    for (var i = 0; i < 5; i++) {
+        arr1[i] = function() {
+            return i;
+        }
+    }
+    
+    for(var index1 in arr1) {
+        console.log(arr1[index1]());
+    }
+    
+    // 위의 코드는 아래와 같이 변경해야 한다.
+    var arr2 = [];
+    for(var j = 0; j < 5; j++) {
+        arr2[j] = function(id) {
+            return function() {
+                return id;
+            }
+        }(j);
+    }
+    
+    for(var index2 in arr2) {
+        console.log(arr2[index2]());
+    }
+</script>

@@ -1,0 +1,99 @@
+<script>
+    /* Klass
+        많은 자바스크립트 라이브러리가 새로운 문법 설탕을 도입하여 클래스를 흉내낸다.
+        각 구현은 다르지만 공통점을 뽑아보면 다음과 같은 것들이 있다
+
+        - 클래스의 생성자라고 할 수 있는 메서드에 대한 명명 규칙이 존재한다.
+          이 메서드들은 자동으로 호출되며, initialize, _init 등의 이름을 가진다.
+        - 클래스는 다른 클래스로부터 상속된다.
+        - 자식 클래스 내부에서 부모 클래스(상위 클래스)에 접근할 수 있는 경로가 존재한다.
+
+     */
+
+    var klass = function (Parent, props) {
+        var Child, F, i;
+
+        //1. 새로운 생성자
+        Child = function () {
+            // uber는 여기서 부모라는 뜻.
+            // 부모 클래스가 있고, 생성자가 있다면...
+            if (Child.uber && Child.uber.hasOwnProperty("__construct")) {
+                // 명시되어있지 않으니, 걍 arguments 로 매핑시켜버리는구나..
+                Child.uber.__construct.apply(this,arguments);
+            }
+            // 자기 자신의 객체에 생성자.
+            if (Child.prototype.hasOwnProperty("__construct")) {
+                Child.prototype.__construct.apply(this, arguments);
+            }
+        }
+
+        //2. 상속
+        Parent = Parent || Object;
+        F = function () {};
+        F.prototype = Parent.prototype;
+        Child.prototype = new F();
+        Child.uber = Parent.prototype;
+        Child.prototype.constructor = Child;
+
+        //3. 구현 메서드를 추가한다.
+        for(i in props) {
+            if (props.hasOwnProperty(i)) {
+                Child.prototype[i] = props[i];
+            }
+        }
+
+        // '클래스'를 반환한다.
+        return Child;
+    }
+
+    var Man = klass(null, {
+       __construct: function (what) {
+           console.log("Man's constructor");
+           this.name = what;
+       },
+       getName: function () {
+           return this.name;
+       }
+    });
+
+    var first = new Man('Adam');    // "Man's constructor"가 출력된다.
+    first.getName();    // "Adam"
+
+    // 클래스를 상속받은 SuperMan 클래스
+    var SuperMan = klass(Man, {
+       __construct: function (what) {
+           console.log("SuperMan's constructor");
+       },
+       getName: function () {
+           var name = SuperMan.uber.getName.call(this);
+           return "I am " + name;
+       }
+    });
+
+    var clark = new SuperMan('Clerk Kent');
+    clark.getName(); // "I am Clerk Kent"
+
+    /* 첫번째 줄에서는 "Man's constructor"가 출력된 다음 "Superman's constructor"가 출력된다.
+       일부 언어에서 자식의 생성자가 호출될 때마다 자동으로 부모의 생성자가 호출되는 동작 방식 까지 모방해 본 결과다.
+     */
+    console.log(clark instanceof Man);  // true
+    console.log(clark instanceof SuperMan); // true
+
+    // ?? 프록시 객체는 왜 필요? this.name 가져오려고// 즉, 부모의 멤버를 가지고 있기 위하여
+    // -> clark 에서 this.name 을 찾으면 프로토타입 체인으로,
+    // clark.__proto__.name 으로 찾아감.
+
+    /* klass() 구현은 세 개의 흥미로운 부분으로 나뉜다.
+        1. Child() 생성자 함수가 생성된다. 마지막에 이 함수가 반환되어 클래스로 사용될 것이다.
+           __construct 메서드가 있다면 이 함수 안에서 호출된다. 그 전에 부모의 __construct가 있다면
+           uber 스태틱 프로퍼티를 사용하여 호출한다.
+           Man 클래스처럼 별도의 부모 클래스 없이 Object를 상속했다면 uber라는 프로퍼티는 정의되어 있지 않을 수 있다.
+        2. 두 번째 부분은 상속을 처리한다. 바로 앞 절에서 다룬 클래스 방식의 최종 버전을 사용했다.
+           유일하게 새로운 점은 상속받을 클래스에 Parent가 존재하지 않을 경우 Object가 지정되도록 한 것이다.
+        3. 마지막 부분에서는 루프를 돌면서 클래스를 실제로 정의하는 구현 메서드들을 Child의 프로토타입에 추가한다.
+     */
+
+     /* 사실 이런 패턴은 피하는 것이 좋다. 기술적으로는 언어에 존재하지 않는 혼란스러운 개념들을 온통 끌고 들어오기 때문이다.
+        새로운 문법과 규칙이 추가되고, 이런 것을 학습하고 기억해야 한다.
+      */
+</script>

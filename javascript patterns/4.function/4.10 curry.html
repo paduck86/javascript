@@ -1,0 +1,52 @@
+<script>
+    /* 커링 : 함수변형과정
+     */
+
+    //커링된 add()
+    //부분적인 인자의 목록을 받는다.
+    function add(x, y) {
+        var oldx = x, oldy = y;
+        if (typeof oldy === "undefined") { // 부분적인 적용
+            return function (newy) {
+                return oldx + newy;
+            }
+        }
+
+        //전체 인자를 적용
+        return x + y;
+    }
+
+    alert(typeof add(5));  // "function"
+    alert(add(3)(4));   // 7
+
+    var add2000 = add(2000);
+    alert(add2000(10));
+    //=================>
+
+    function add2(x, y) {
+        if (typeof y === "undefined") {
+            return function (newy) {
+                return x + newy;
+            }
+        }
+        return x + y;
+    }
+
+    // 범용 커링함수 코드
+    function schonfinkelize(fn) {
+        var slice = Array.prototype.slice,
+            stored_args = slice.call(arguments, 1);
+
+        return function () {
+            var new_args = slice.call(arguments),
+                args = stored_args.concat(new_args);
+            return fn.apply(null, args);
+        }
+    }
+
+    function add3(a, b, c, d, e) {
+        return a + b + c + d + e;
+    }
+
+    schonfinkelize(add, 1, 2, 3)(4, 5);
+</script>

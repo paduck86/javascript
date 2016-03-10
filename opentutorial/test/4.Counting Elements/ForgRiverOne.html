@@ -1,0 +1,65 @@
+<script>
+function solution(X, A) {
+    var sortable = []; // [[index,value],[index,value]...]
+    var target = [];
+    var cnt = A.length;
+    var targetCnt;
+    var targetIdx;
+    var i;
+    for(i = 0; i < cnt; i++) {
+        sortable.push([i,A[i]]);
+    }
+    
+    // value 값으로 정렬
+    // [[0,1],[2,1],[4,2],[1,3],[5,3],[3,4],[7,4],[6,5]]
+    sortable.sort(function(a,b){return a[1]-b[1];});
+    
+    // X 지점의 index
+    i = 0;
+    for(i = 0; i < cnt; i++) {
+        if(sortable[i][1] == X){
+            targetIdx = i;
+            break;
+        }
+    }
+    if(typeof targetIdx === 'undefined'){ return -1; }
+    // 배열에 없는 양수 있으면 return -1
+    i = 0;
+    for(i=X-1; i>0; i--) {
+        isExist = false;
+        for(var j = 0; j <= targetIdx; j++) {
+            if(sortable[j][1] == i) {
+                isExist = true;
+                break;
+            }
+        }
+        if(!isExist){
+            return -1;
+        }
+    }
+    
+    // X 값이 최초로 발견되는 array 부분까지만 target 으로 옮겨담기
+    i = 0;
+    for(i = 0; i <= targetIdx; i++) {
+        target.push(sortable[i]);
+    }
+
+    // 중복된 value 가 있으면 index 가 큰것을 삭제함.
+    // [[0,1],[4,2],[1,3],[3,4],[6,5]]
+    i = 0;
+    for(i = 0; i < target.length-1; i++) {
+        if(target[i][1] == target[i+1][1]) {
+            target.splice(i+1,1);
+        }
+    }    
+    
+
+    
+    // 마지막으로 targetArray 중에서 index가 가장 큰 값을 구함.
+    // index 로 정렬
+    target.sort(function(a,b){return a[0]-b[0];});
+    return target[target.length-1][0];
+}
+    
+console.log(solution(5, [1, 3, 1, 4, 2, 3, 5, 4]));
+</script>

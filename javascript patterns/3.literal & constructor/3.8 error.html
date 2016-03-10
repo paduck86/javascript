@@ -1,0 +1,17 @@
+<script>
+    try {
+        // 에러를 발생시킨다.
+        throw {
+            name: "MyErrorType", //임의의 에러 타입
+            message: "oops",
+            extra: "This was rather embarrassing",
+            remedy: genericErrorHandler // 에러를 처리할 함수
+        };
+    } catch (e) {
+        // 사용자에게 공지한다.
+        alert(e.message);   // "oops"
+
+        // 훌륭하게 에러를 처리한다.
+        e.remedy(); // genericErrorhandler() 호출.
+    }
+</script>

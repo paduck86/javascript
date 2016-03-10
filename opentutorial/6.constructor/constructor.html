@@ -1,0 +1,26 @@
+<script>
+    //객체란 서로 연관된 변수와 함수를 그루핑한 그릇이라고 할 수 있다/ 객체 내의 변수를 프로퍼티 함수를 메소드라고 부른다.
+    
+    var person = {
+        'name' : 'egoing',
+        'introduce' : function() {
+            return 'My name is ' + this.name; 
+        }
+    };
+    
+    document.write(person.introduce());
+    
+    //생성자는 객체를 만드는 역할을 하는 함수다. 자바스크립트에서 함수는 재사용 가능한 로직의 묶음이 아니라 책체를 만드는 창조자라고 할 수 있다.
+    function Person(name) {
+        this.name = name;
+        this.introduce = function() {
+            return 'My name is ' + this.name;
+        }
+    }
+    
+    var p1 = new Person('egoing');
+    document.write(p1.introduce());
+    
+    var p2 = new Person('leezche');
+    document.write(p2.introduce());
+</script>

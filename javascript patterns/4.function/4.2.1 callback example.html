@@ -1,0 +1,58 @@
+<script>
+    /* 콜백예제1 ( 콜백 없는 상태 )
+     */
+    var findNodes = function findNodes() {
+        var i = 10000,
+            nodes = [],
+            found;
+
+        while (i) {
+            i -= 1;
+            // 로직..
+            nodes.push(found);
+        }
+
+        return nodes;
+    }
+
+    var hide = function hide(nodes) {
+        var i = 0,
+            max = nodes.length;
+        for (; i < max; i++) {
+            nodes[0].style.display = "none";
+        }
+    }
+    hide(findeNodes());
+
+    /* 콜백예제2 - 리팩터링
+     */
+    var findNodes = function findNodes(callback) {
+        var i = 10000,
+            nodes = [],
+            found;
+
+        while (i) {
+            i -= 1;
+
+            if (typeof callback !== "function") {
+                callback = false;
+            }
+
+            // 로직..
+            if (callback) {
+               callback(found);
+            }
+            nodes.push(found);
+        }
+        return nodes;
+    }
+
+    var hide = function (node) {
+        node.style.display = "none";
+    }
+
+    findNodes(hide);
+    findNodes(function (node) {
+       node.style.display = "none";
+    });
+</script>

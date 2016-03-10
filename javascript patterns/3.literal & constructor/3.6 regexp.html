@@ -1,0 +1,27 @@
+<script>
+    /* 정규식
+       자바스크립트에서는 정규식 역시 객체이다. 생성법은 두가지이다.
+       1. new RegExp() 사용
+       2. 정규식 리터럴 사용
+    */
+
+    // 정규식 리터럴
+    var re = /\\/gm;
+
+    // 생성자
+    var re = new RegExp("\\\\", "gm");
+
+    // => 정규식 리터럴이 짱이다.
+
+    /* 정규 표현식 리터럴 문법
+       var re = /pattern/gmi;
+       - g: 전역 매칭
+       - m: 여러 줄 매칭
+       - i: 대소문자 구분 없이 매칭
+     */
+
+    // 정규식 리터럴을 사용하면 정규식 객체를 인자로 받는
+    // String.prototype.replace()와 같은 메서드를 호출할 때 좀더 정확한 코드를 작성할 수 있다.
+    var no_letters = "abc123XYZ".replace(/[a-z]/gi, "");
+    console.log(no_letters);
+</script>
